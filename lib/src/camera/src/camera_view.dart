@@ -28,6 +28,7 @@ class CameraView extends StatefulWidget {
     this.videoDuration,
     this.resolutionPreset,
     this.imageFormatGroup,
+    this.requestType,
   }) : super(key: key);
 
   ///
@@ -44,6 +45,8 @@ class CameraView extends StatefulWidget {
   /// Camera image format. Default to [ImageFormatGroup.jpeg]
   ///
   final ImageFormatGroup? imageFormatGroup;
+
+  final RequestType? requestType;
 
   /// Camera view route name
   static const String name = 'CameraView';
@@ -76,8 +79,7 @@ class CameraView extends StatefulWidget {
   }
 }
 
-class _CameraViewState extends State<CameraView>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, TickerProviderStateMixin {
   late final ControllerNotifier _controllerNotifier;
   late final PlaygroundController _playgroundController;
   late final CamController _camController;
@@ -92,9 +94,9 @@ class _CameraViewState extends State<CameraView>
       context: context,
       imageFormatGroup: widget.imageFormatGroup,
       resolutionPreset: widget.resolutionPreset,
+      request: widget.requestType ?? RequestType.image,
     );
-    _playgroundController = PlaygroundController()
-      ..addListener(_playgroundListener);
+    _playgroundController = PlaygroundController()..addListener(_playgroundListener);
     Future<void>.delayed(_kRouteDuration, () {
       _hideSB();
       _camController.createCamera();
@@ -103,8 +105,7 @@ class _CameraViewState extends State<CameraView>
 
   void _playgroundListener() {
     final value = _playgroundController.value;
-    final isPlaygroundActive =
-        value.hasFocus || value.isEditing || value.hasStickers;
+    final isPlaygroundActive = value.hasFocus || value.isEditing || value.hasStickers;
     _camController.update(isPlaygroundActive: isPlaygroundActive);
   }
 

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:likk_picker/assets/icons/custom_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:likk_picker/likk_picker.dart';
 
 import '../controllers/cam_controller.dart';
 import '../entities/camera_type.dart';
@@ -31,6 +32,7 @@ class CameraTypeChanger extends StatelessWidget {
               child: _TypesPageView(
                 initialType: controller.value.cameraType,
                 onChanged: controller.changeCameraType,
+                requestType: controller.requestType,
               ),
             ),
 
@@ -65,11 +67,13 @@ class _TypesPageView extends StatefulWidget {
     Key? key,
     required this.initialType,
     required this.onChanged,
+    required this.requestType,
   }) : super(key: key);
 
   final void Function(CameraType type) onChanged;
 
   final CameraType initialType;
+  final RequestType requestType;
 
   @override
   _TypesPageViewState createState() => _TypesPageViewState();
@@ -78,6 +82,7 @@ class _TypesPageView extends StatefulWidget {
 class _TypesPageViewState extends State<_TypesPageView> {
   late final PageController pageController;
   double pageValue = 0.0;
+  List<CameraType> listCameraTypes = [];
 
   @override
   void initState() {
@@ -91,19 +96,20 @@ class _TypesPageViewState extends State<_TypesPageView> {
           pageValue = pageController.page ?? 0.0;
         });
       });
+    listCameraTypes = widget.requestType == RequestType.image ? CameraType.imageValues : CameraType.allValues;
   }
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      itemCount: CameraType.values.length,
+      itemCount: listCameraTypes.length,
       controller: pageController,
       onPageChanged: (index) {
-        final type = CameraType.values[index];
+        final type = listCameraTypes[index];
         widget.onChanged(type);
       },
       itemBuilder: (context, position) {
-        final type = CameraType.values[position];
+        final type = listCameraTypes[position];
         var activePercent = 0.0;
         if (position == pageValue.floor()) {
           activePercent = 1 - (pageValue - position).clamp(0.0, 1.0);
@@ -158,8 +164,7 @@ class _CameraType extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: (14.0 * activePercent).clamp(12.0, 14.0),
-            color: Colors.white
-                .withAlpha((0xFF * activePercent.clamp(0.5, 1.0)).round()),
+            color: Colors.white.withAlpha((0xFF * activePercent.clamp(0.5, 1.0)).round()),
           ),
         ),
       ),

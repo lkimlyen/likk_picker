@@ -74,17 +74,14 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
   Widget build(BuildContext context) {
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight =
-        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
 
-    if (MediaQuery.of(context).viewInsets.bottom != 0 &&
-        MediaQuery.of(context).viewInsets.bottom > (_panelMaxHeight * 0.37)) {
+    if (MediaQuery.of(context).viewInsets.bottom != 0 && MediaQuery.of(context).viewInsets.bottom > (_panelMaxHeight * 0.37)) {
       kKeyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     }
 
     final _panelMinHeight =
-        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
-            (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
+        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) - (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
 
     final showKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
@@ -180,8 +177,7 @@ class GalleryView extends StatefulWidget {
   _GalleryViewState createState() => _GalleryViewState();
 }
 
-class _GalleryViewState extends State<GalleryView>
-    with SingleTickerProviderStateMixin {
+class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStateMixin {
   late final GalleryController _controller;
   late final PanelController _panelController;
 
@@ -287,8 +283,7 @@ class _GalleryViewState extends State<GalleryView>
       //   _showAlert(_controller.setting);
       //   return false;
       // }
-      if (_controller.setting.backAndUnselect == null ||
-          _controller.setting.backAndUnselect!()) {
+      if (_controller.setting.backAndUnselect == null || _controller.setting.backAndUnselect!()) {
         _controller._internal = true;
         // ignore: cascade_invocations
         _controller.value = _controller.value.copyWith(
@@ -327,8 +322,7 @@ class _GalleryViewState extends State<GalleryView>
     _controller._cachedInitList = _controller.value.selectedEntities;
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight =
-        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
     final _headerSetting = hs;
 
     final albumListHeight = _panelMaxHeight - hs.headerMaxHeight;
@@ -357,20 +351,16 @@ class _GalleryViewState extends State<GalleryView>
               builder: (context) {
                 if (_controller.fullScreenMode) {
                   return SizedBox(
-                    height: _headerSetting.headerMaxHeight +
-                        MediaQuery.of(context).padding.top,
+                    height: _headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
                   );
                 }
 
                 return ValueListenableBuilder<SliderValue>(
                   valueListenable: _panelController,
                   builder: (context, SliderValue value, child) {
-                    final height = (_headerSetting.headerMinHeight +
-                            (_headerSetting.headerMaxHeight -
-                                    _headerSetting.headerMinHeight) *
-                                value.factor *
-                                1.2)
-                        .clamp(
+                    final height =
+                        (_headerSetting.headerMinHeight + (_headerSetting.headerMaxHeight - _headerSetting.headerMinHeight) * value.factor * 1.2)
+                            .clamp(
                       _headerSetting.headerMinHeight,
                       _headerSetting.headerMaxHeight,
                     );
@@ -416,9 +406,7 @@ class _GalleryViewState extends State<GalleryView>
           animation: _animation,
           builder: (context, child) {
             final offsetY = _headerSetting.headerMaxHeight +
-                (_controller.fullScreenMode
-                    ? MediaQuery.of(context).padding.top
-                    : 0) +
+                (_controller.fullScreenMode ? MediaQuery.of(context).padding.top : 0) +
                 (_panelMaxHeight - hs.headerMaxHeight) * (1 - _animation.value);
             return Visibility(
               visible: _animation.value > 0.0,
@@ -570,8 +558,7 @@ class _GalleryViewFieldState extends State<GalleryViewField> {
           context,
         );
       },
-      child: widget.previewBuilder != null &&
-              (_controller.recentEntities?.isNotEmpty ?? false)
+      child: widget.previewBuilder != null && (_controller.recentEntities?.isNotEmpty ?? false)
           ? GalleryRecentPreview(
               entity: _controller.recentEntities!.first,
               builder: widget.previewBuilder,
@@ -597,6 +584,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     PanelSetting? panelSetting,
     HeaderSetting? headerSetting,
     GallerySetting? gallerySetting,
+    RequestType? requestType,
   })  : panelSetting = panelSetting ?? const PanelSetting(),
         headerSetting = headerSetting ?? const HeaderSetting(),
         setting = gallerySetting ?? const GallerySetting(),
@@ -606,6 +594,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         _entitiesNotifier = ValueNotifier(const BaseState()),
         _recentEntities = ValueNotifier(const BaseState()),
         _albumVisibility = ValueNotifier(false),
+        requestType = requestType ?? RequestType.image,
         super(const GalleryValue()) {
     _repository = GalleryRepository(
       albumsNotifier: _albumsNotifier,
@@ -614,6 +603,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       recentEntitiesNotifier: _recentEntities,
     );
   }
+
+  final RequestType? requestType;
 
   /// Panel setting
   final PanelSetting panelSetting;
@@ -670,8 +661,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   List<LikkEntity> _cachedInitList = [];
 
   /// Recent entities notifier
-  final ValueNotifier<GalleryState> galleryState =
-      ValueNotifier(GalleryState.show);
+  final ValueNotifier<GalleryState> galleryState = ValueNotifier(GalleryState.show);
 
   // ignore: public_member_api_docs
   bool get isShowPanel => _panelController.isVisible;
@@ -691,8 +681,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       value = const GalleryValue();
       return;
     }
-    final _afterRemove = value.selectedEntities
-      ..removeWhere((element) => list.contains(element));
+    final _afterRemove = value.selectedEntities..removeWhere((element) => list.contains(element));
     _onSubmitted?.call(_afterRemove);
     _clearedSelection = false;
     _internal = true;
@@ -783,9 +772,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   void _closePanel() {
     galleryState.value = GalleryState.hide;
     _panelController.closePanel();
-    final entities = (_clearedSelection || value.selectedEntities.isEmpty)
-        ? <LikkEntity>[]
-        : value.selectedEntities;
+    final entities = (_clearedSelection || value.selectedEntities.isEmpty) ? <LikkEntity>[] : value.selectedEntities;
     _completer.complete(entities);
     // _onSubmitted?.call(entities);
     // _checkKeyboard.value = false;
@@ -808,7 +795,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     LikkEntity? entity;
 
     final route = SlideTransitionPageRoute<LikkEntity>(
-      builder: const CameraView(),
+      builder: CameraView(requestType: requestType),
       begainHorizontal: true,
       endHorizontal: false,
       transitionDuration: const Duration(milliseconds: 300),
@@ -889,8 +876,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }) async {
     // If dont have permission dont do anything
     final permission = await PhotoManager.requestPermissionExtend();
-    if (permission != PermissionState.authorized &&
-        permission != PermissionState.limited) {
+    if (permission != PermissionState.authorized && permission != PermissionState.limited) {
       PhotoManager.openSetting();
       return [];
     }
@@ -940,8 +926,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   ///
   /// return true if selected media reached to maximum selection limit
   ///
-  bool get reachedMaximumLimit =>
-      value.selectedEntities.length == setting.maximum;
+  bool get reachedMaximumLimit => value.selectedEntities.length == setting.maximum;
 
   ///
   /// return true is gallery is in single selection mode
