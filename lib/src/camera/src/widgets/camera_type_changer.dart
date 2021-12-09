@@ -89,7 +89,7 @@ class _TypesPageViewState extends State<_TypesPageView> {
     super.initState();
     pageValue = widget.initialType.index.toDouble();
     pageController = PageController(
-      initialPage: widget.initialType.index,
+      initialPage: 0,
       viewportFraction: 0.25,
     )..addListener(() {
         setState(() {

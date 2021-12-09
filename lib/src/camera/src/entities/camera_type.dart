@@ -24,6 +24,6 @@ class CameraType {
   static const CameraType selfi = CameraType._internal('Selfi', 4);
 
   ///
-  static List<CameraType> get allValues => [normal, video, selfi];
-  static List<CameraType> get imageValues => [normal, selfi];
+  static List<CameraType> get allValues => [normal, video];
+  static List<CameraType> get imageValues => [normal];
 }
