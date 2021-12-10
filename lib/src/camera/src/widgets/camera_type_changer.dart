@@ -87,7 +87,7 @@ class _TypesPageViewState extends State<_TypesPageView> {
   @override
   void initState() {
     super.initState();
-    pageValue = widget.initialType.index.toDouble();
+    pageValue = 0.0;
     pageController = PageController(
       initialPage: 0,
       viewportFraction: 0.25,
