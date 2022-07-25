@@ -885,6 +885,14 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     _completer = Completer<List<LikkEntity>>();
     galleryState.value = GalleryState.show;
 
+    if (selectedEntities?.isNotEmpty ?? false) {
+      _internal = true;
+      value = value.copyWith(
+        selectedEntities: selectedEntities,
+        previousSelection: true,
+      );
+    }
+
     if (_wrapperKey.currentState == null) {
       _fullScreenMode = true;
       final route = SlideTransitionPageRoute<List<LikkEntity>>(
@@ -901,13 +909,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       _panelController.openPanel();
       FocusManager.instance.primaryFocus?.unfocus();
     }
-    if (selectedEntities?.isNotEmpty ?? false) {
-      _internal = true;
-      value = value.copyWith(
-        selectedEntities: selectedEntities,
-        previousSelection: true,
-      );
-    }
+
     return _completer.future;
   }
 
