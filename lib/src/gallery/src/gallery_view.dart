@@ -9,6 +9,7 @@ import 'package:likk_picker/src/slidable_panel/slidable_panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 // ignore: always_use_package_imports
@@ -794,18 +795,25 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     _accessCamera = true;
     LikkEntity? entity;
 
-    final route = SlideTransitionPageRoute<LikkEntity>(
-      builder: CameraView(requestType: requestType),
-      begainHorizontal: true,
-      endHorizontal: false,
-      transitionDuration: const Duration(milliseconds: 300),
-    );
+    var statuses = await [Permission.microphone, Permission.camera].request();
 
-    if (fullScreenMode) {
-      entity = await Navigator.of(context).pushReplacement(route);
-    } else {
-      entity = await Navigator.of(context).push(route);
-      _closeOnCameraSelect();
+    if (statuses[Permission.camera] == PermissionStatus.granted && statuses[Permission.microphone] == PermissionStatus.granted) {
+      final route = SlideTransitionPageRoute<LikkEntity>(
+        builder: CameraView(requestType: requestType),
+        begainHorizontal: true,
+        endHorizontal: false,
+        transitionDuration: const Duration(milliseconds: 300),
+      );
+
+      if (fullScreenMode) {
+        entity = await Navigator.of(context).pushReplacement(route);
+      } else {
+        entity = await Navigator.of(context).push(route);
+        _closeOnCameraSelect();
+      }
+    } else if (statuses[Permission.camera] == PermissionStatus.permanentlyDenied ||
+        statuses[Permission.microphone] == PermissionStatus.permanentlyDenied) {
+      openAppSettings();
     }
 
     var entities = [...value.selectedEntities];
