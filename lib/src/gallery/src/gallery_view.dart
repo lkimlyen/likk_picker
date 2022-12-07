@@ -1,25 +1,17 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
-import 'package:likk_picker/src/camera/camera_view.dart';
-import 'package:likk_picker/src/playground/playground.dart';
 import 'package:likk_picker/src/slidable_panel/slidable_panel.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 // ignore: always_use_package_imports
-import '../../likk_entity.dart';
 // ignore: always_use_package_imports
 import 'controllers/gallery_repository.dart';
 // ignore: always_use_package_imports
-import 'entities/gallery_setting.dart';
 // ignore: always_use_package_imports
 import 'entities/gallery_value.dart';
 // ignore: always_use_package_imports
@@ -213,7 +205,7 @@ class _GalleryViewState extends State<GalleryView>
         curve: Curves.fastLinearToSlowEaseIn,
         reverseCurve: Curves.easeOut,
       ),
-    );
+    ) as Animation<double>;
   }
 
   void _toogleAlbumList(bool isVisible) {
@@ -854,7 +846,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
     } else if (statuses[Permission.camera] ==
             PermissionStatus.permanentlyDenied ||
         statuses[Permission.microphone] == PermissionStatus.permanentlyDenied) {
-      openAppSettings();
+      await openAppSettings();
     }
 
     final entities = [...value.selectedEntities];
