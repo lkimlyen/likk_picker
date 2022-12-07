@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:image_cropper/image_cropper.dart';
 import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/camera/camera_view.dart';
@@ -75,14 +77,17 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
   Widget build(BuildContext context) {
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMaxHeight =
+        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
 
-    if (MediaQuery.of(context).viewInsets.bottom != 0 && MediaQuery.of(context).viewInsets.bottom > (_panelMaxHeight * 0.37)) {
+    if (MediaQuery.of(context).viewInsets.bottom != 0 &&
+        MediaQuery.of(context).viewInsets.bottom > (_panelMaxHeight * 0.37)) {
       kKeyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     }
 
     final _panelMinHeight =
-        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) - (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
+        (ps.minHeight ?? kKeyboardHeight ?? _panelMaxHeight * 0.37) -
+            (widget.safeAreaBottom ? MediaQuery.of(context).padding.bottom : 0);
 
     final showKeyboard = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
@@ -178,14 +183,15 @@ class GalleryView extends StatefulWidget {
   _GalleryViewState createState() => _GalleryViewState();
 }
 
-class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStateMixin {
+class _GalleryViewState extends State<GalleryView>
+    with SingleTickerProviderStateMixin {
   late final GalleryController _controller;
   late final PanelController _panelController;
 
   late final AnimationController _animationController;
   late final Animation<double> _animation;
 
-  double albumHeight = 0.0;
+  double albumHeight = 0;
 
   @override
   void initState() {
@@ -201,7 +207,7 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
       value: 0,
     );
 
-    _animation = Tween(begin: 0.0, end: 1.0).animate(
+    _animation = Tween(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.fastLinearToSlowEaseIn,
@@ -284,7 +290,8 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
       //   _showAlert(_controller.setting);
       //   return false;
       // }
-      if (_controller.setting.backAndUnselect == null || _controller.setting.backAndUnselect!()) {
+      if (_controller.setting.backAndUnselect == null ||
+          _controller.setting.backAndUnselect!()) {
         _controller._internal = true;
         // ignore: cascade_invocations
         _controller.value = _controller.value.copyWith(
@@ -323,7 +330,8 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
     _controller._cachedInitList = _controller.value.selectedEntities;
     final ps = _controller.panelSetting;
     final hs = _controller.headerSetting;
-    final _panelMaxHeight = ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
+    final _panelMaxHeight =
+        ps.maxHeight ?? MediaQuery.of(context).size.height - hs.topMargin;
     final _headerSetting = hs;
 
     final albumListHeight = _panelMaxHeight - hs.headerMaxHeight;
@@ -352,16 +360,20 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
               builder: (context) {
                 if (_controller.fullScreenMode) {
                   return SizedBox(
-                    height: _headerSetting.headerMaxHeight + MediaQuery.of(context).padding.top,
+                    height: _headerSetting.headerMaxHeight +
+                        MediaQuery.of(context).padding.top,
                   );
                 }
 
                 return ValueListenableBuilder<SliderValue>(
                   valueListenable: _panelController,
                   builder: (context, SliderValue value, child) {
-                    final height =
-                        (_headerSetting.headerMinHeight + (_headerSetting.headerMaxHeight - _headerSetting.headerMinHeight) * value.factor * 1.2)
-                            .clamp(
+                    final height = (_headerSetting.headerMinHeight +
+                            (_headerSetting.headerMaxHeight -
+                                    _headerSetting.headerMinHeight) *
+                                value.factor *
+                                1.2)
+                        .clamp(
                       _headerSetting.headerMinHeight,
                       _headerSetting.headerMaxHeight,
                     );
@@ -397,7 +409,7 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
         GalleryAssetSelector(
           controller: _controller,
           onEdit: (e) {
-            _controller._openPlayground(context, e);
+            _controller.openPlayground(context, e);
           },
           onSubmit: _controller.completeTask,
         ),
@@ -407,12 +419,14 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
           animation: _animation,
           builder: (context, child) {
             final offsetY = _headerSetting.headerMaxHeight +
-                (_controller.fullScreenMode ? MediaQuery.of(context).padding.top : 0) +
+                (_controller.fullScreenMode
+                    ? MediaQuery.of(context).padding.top
+                    : 0) +
                 (_panelMaxHeight - hs.headerMaxHeight) * (1 - _animation.value);
             return Visibility(
               visible: _animation.value > 0.0,
               child: Transform.translate(
-                offset: Offset(0.0, offsetY),
+                offset: Offset(0, offsetY),
                 child: child,
               ),
             );
@@ -484,6 +498,7 @@ class GalleryViewField extends StatefulWidget {
   /// If used [GalleryViewField] with [GalleryViewWrapper]
   /// this setting will be ignored.
   ///
+  // ignore: lines_longer_than_80_chars
   /// [GalleryController] passed to the [GalleryViewWrapper] will be applicable..
   /// ///
   final GalleryController controller;
@@ -559,7 +574,8 @@ class _GalleryViewFieldState extends State<GalleryViewField> {
           context,
         );
       },
-      child: widget.previewBuilder != null && (_controller.recentEntities?.isNotEmpty ?? false)
+      child: widget.previewBuilder != null &&
+              (_controller.recentEntities?.isNotEmpty ?? false)
           ? GalleryRecentPreview(
               entity: _controller.recentEntities!.first,
               builder: widget.previewBuilder,
@@ -662,7 +678,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   List<LikkEntity> _cachedInitList = [];
 
   /// Recent entities notifier
-  final ValueNotifier<GalleryState> galleryState = ValueNotifier(GalleryState.show);
+  final ValueNotifier<GalleryState> galleryState =
+      ValueNotifier(GalleryState.show);
 
   // ignore: public_member_api_docs
   bool get isShowPanel => _panelController.isVisible;
@@ -682,7 +699,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       value = const GalleryValue();
       return;
     }
-    final _afterRemove = value.selectedEntities..removeWhere((element) => list.contains(element));
+    final _afterRemove = value.selectedEntities
+      ..removeWhere((element) => list.contains(element));
     _onSubmitted?.call(_afterRemove);
     _clearedSelection = false;
     _internal = true;
@@ -743,14 +761,29 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// When selection is completed
-  void completeTask(BuildContext context) {
+  // ignore: avoid_void_async
+  void completeTask(BuildContext context) async {
+    if (setting.enableCropper &&
+        setting.maximum == 1 &&
+        value.selectedEntities.first.entity.type == AssetType.image) {
+      final entity = await openCropper(context, value.selectedEntities.first);
+      if (entity != null) {
+        value.selectedEntities.clear();
+        value.selectedEntities.add(entity);
+      } else {
+        return;
+      }
+    }
+
     if (_fullScreenMode) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop(value.selectedEntities);
     } else {
       galleryState.value = GalleryState.hide;
       _panelController.closePanel();
       // _checkKeyboard.value = false;
     }
+
     _onSubmitted?.call(value.selectedEntities);
     _completer.complete(value.selectedEntities);
     // _internal = true;
@@ -773,7 +806,9 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   void _closePanel() {
     galleryState.value = GalleryState.hide;
     _panelController.closePanel();
-    final entities = (_clearedSelection || value.selectedEntities.isEmpty) ? <LikkEntity>[] : value.selectedEntities;
+    final entities = (_clearedSelection || value.selectedEntities.isEmpty)
+        ? <LikkEntity>[]
+        : value.selectedEntities;
     _completer.complete(entities);
     // _onSubmitted?.call(entities);
     // _checkKeyboard.value = false;
@@ -791,17 +826,22 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }
 
   /// Open camera from [GalleryView]
-  Future<LikkEntity?> openCamera(BuildContext context) async {
+  Future<void> openCamera(BuildContext context) async {
     _accessCamera = true;
     LikkEntity? entity;
 
-    var statuses = await [Permission.microphone, Permission.camera].request();
+    final statuses = await [Permission.microphone, Permission.camera].request();
+    final route = SlideTransitionPageRoute<LikkEntity>(
+      builder: const CameraView(),
+      begainHorizontal: true,
+      transitionDuration: const Duration(milliseconds: 300),
+    );
 
-    if (statuses[Permission.camera] == PermissionStatus.granted && statuses[Permission.microphone] == PermissionStatus.granted) {
+    if (statuses[Permission.camera] == PermissionStatus.granted &&
+        statuses[Permission.microphone] == PermissionStatus.granted) {
       final route = SlideTransitionPageRoute<LikkEntity>(
         builder: CameraView(requestType: requestType),
         begainHorizontal: true,
-        endHorizontal: false,
         transitionDuration: const Duration(milliseconds: 300),
       );
 
@@ -811,24 +851,126 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         entity = await Navigator.of(context).push(route);
         _closeOnCameraSelect();
       }
-    } else if (statuses[Permission.camera] == PermissionStatus.permanentlyDenied ||
+    } else if (statuses[Permission.camera] ==
+            PermissionStatus.permanentlyDenied ||
         statuses[Permission.microphone] == PermissionStatus.permanentlyDenied) {
       openAppSettings();
     }
 
-    var entities = [...value.selectedEntities];
-    if (entity != null) {
-      entities.add(entity);
-      _onChanged?.call(entity, false);
-      _onSubmitted?.call(entities);
+    final entities = [...value.selectedEntities];
+    if (entity == null) {
+      _accessCamera = false;
+      _completer.complete(entities);
+      return;
     }
+
+    if (setting.enableCropper && entity.entity.type == AssetType.image) {
+      // ignore: use_build_context_synchronously
+      final editedEntity = await openCropper(context, entity);
+      if (editedEntity != null) {
+        entity = editedEntity;
+      } else {
+        return;
+      }
+    }
+    if (entities.length == setting.maximum) {
+      entities.removeAt(0);
+    }
+    entities.add(entity);
+    _onChanged?.call(entity, false);
+    _onSubmitted?.call(entities);
     _accessCamera = false;
     _completer.complete(entities);
+  }
+
+  /// Take photo with camera
+  Future<LikkEntity?> takePhoto(BuildContext context,
+      {bool saveImage = true}) async {
+    _accessCamera = true;
+    LikkEntity? entity;
+
+    final route = SlideTransitionPageRoute<LikkEntity>(
+      builder: CameraView(saveImage: saveImage),
+      begainHorizontal: true,
+      transitionDuration: const Duration(milliseconds: 300),
+    );
+
+    entity = await Navigator.of(context).push(route);
+
+    if (entity == null) {
+      _accessCamera = false;
+      return null;
+    }
+
+    // if (setting.enableCropper && entity.entity.type == AssetType.image) {
+    //   // ignore: use_build_context_synchronously
+    //   final editedEntity = await openCropper(context, entity);
+    //   if (editedEntity != null) {
+    //     entity = editedEntity;
+    //   } else {
+    //     return;
+    //   }
+    // }
+
+    _accessCamera = false;
     return entity;
   }
 
   /// Open camera from [GalleryView]
-  Future<void> _openPlayground(
+  Future<LikkEntity?> openCropper(
+      BuildContext context, LikkEntity entity) async {
+    _accessCamera = true;
+
+    if (!fullScreenMode) {
+      _closeOnCameraSelect();
+    }
+    final file = await entity.entity.file;
+
+    if (file == null) {
+      return null;
+    }
+
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: file.path,
+      androidUiSettings: const AndroidUiSettings(
+        toolbarTitle: 'Cropper',
+        toolbarColor: Color(0xFFF54B64),
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.original,
+        lockAspectRatio: false,
+      ),
+      iosUiSettings: const IOSUiSettings(),
+    );
+    final data = await croppedFile?.readAsBytes();
+
+    if (data == null) {
+      return null;
+    }
+
+    AssetEntity? assetEntity;
+    if (setting.saveCropper) {
+      assetEntity = await PhotoManager.editor.saveImage(data);
+    } else {
+      assetEntity = AssetEntity(
+        id: 'temporary',
+        typeInt: 1,
+        width: 100,
+        height: 100,
+      );
+    }
+
+    if (assetEntity == null) {
+      return null;
+    }
+    _accessCamera = false;
+    return LikkEntity(
+      entity: assetEntity,
+      bytes: data,
+    );
+  }
+
+  /// Open camera from [GalleryView]
+  Future<void> openPlayground(
     BuildContext context,
     LikkEntity entity,
   ) async {
@@ -842,7 +984,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
         enableOverlay: true,
       ),
       begainHorizontal: true,
-      endHorizontal: false,
       transitionDuration: const Duration(milliseconds: 300),
     );
 
@@ -853,10 +994,10 @@ class GalleryController extends ValueNotifier<GalleryValue> {
       _closeOnCameraSelect();
     }
 
-    var entities = [...value.selectedEntities];
+    final entities = [...value.selectedEntities];
     if (pickedEntity != null) {
-      entities.add(entity);
-      _onChanged?.call(entity, false);
+      entities.add(pickedEntity);
+      _onChanged?.call(pickedEntity, false);
       _onSubmitted?.call(entities);
     }
     _accessCamera = false;
@@ -884,9 +1025,18 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }) async {
     // If dont have permission dont do anything
     final permission = await PhotoManager.requestPermissionExtend();
-    if (permission != PermissionState.authorized && permission != PermissionState.limited) {
+    if (permission != PermissionState.authorized &&
+        permission != PermissionState.limited) {
       PhotoManager.openSetting();
       return [];
+    }
+
+    if (selectedEntities?.isNotEmpty ?? false) {
+      _internal = true;
+      value = value.copyWith(
+        selectedEntities: selectedEntities,
+        previousSelection: true,
+      );
     }
 
     _repository.fetchAlbums(setting.requestType);
@@ -936,7 +1086,8 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   ///
   /// return true if selected media reached to maximum selection limit
   ///
-  bool get reachedMaximumLimit => value.selectedEntities.length == setting.maximum;
+  bool get reachedMaximumLimit =>
+      value.selectedEntities.length == setting.maximum;
 
   ///
   /// return true is gallery is in single selection mode

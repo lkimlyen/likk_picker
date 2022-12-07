@@ -1,3 +1,16 @@
+## [1.1.5+2] - 08/12/2021
+* Update `photo_manager`
+## [1.1.5+1] - 08/12/2021
+* Fix `selectedEntities` not set
+
+## [1.1.5] - 08/12/2021
+* Update cropper with save and not save option
+
+## [1.1.4] - 08/12/2021
+* Hide Hidden album 
+* Put Recents album to first
+* Add Image Cropper if maximum = 1 or open camera
+
 ## [1.1.3] - 08/12/2021
 * Fix dispose
 * return LikkEntity in openCamera function

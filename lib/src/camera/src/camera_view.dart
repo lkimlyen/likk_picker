@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/camera/src/widgets/camera_builder.dart';
 import 'package:likk_picker/src/playground/playground.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 
 import 'controllers/cam_controller.dart';
 import 'controllers/controller_notifier.dart';
@@ -29,12 +29,18 @@ class CameraView extends StatefulWidget {
     this.resolutionPreset,
     this.imageFormatGroup,
     this.requestType,
+    this.saveImage = true,
   }) : super(key: key);
 
   ///
   /// Vide duration. Default is 10 seconds.
   ///
   final Duration? videoDuration;
+
+  ///
+  /// Save image to gallery
+  ///
+  final bool saveImage;
 
   ///
   /// Camera resolution. Default to [ResolutionPreset.medium]
@@ -79,7 +85,8 @@ class CameraView extends StatefulWidget {
   }
 }
 
-class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _CameraViewState extends State<CameraView>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late final ControllerNotifier _controllerNotifier;
   late final PlaygroundController _playgroundController;
   late final CamController _camController;
@@ -95,8 +102,10 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
       imageFormatGroup: widget.imageFormatGroup,
       resolutionPreset: widget.resolutionPreset,
       request: widget.requestType ?? RequestType.image,
+      saveImage: widget.saveImage,
     );
-    _playgroundController = PlaygroundController()..addListener(_playgroundListener);
+    _playgroundController = PlaygroundController()
+      ..addListener(_playgroundListener);
     Future<void>.delayed(_kRouteDuration, () {
       _hideSB();
       _camController.createCamera();
@@ -105,7 +114,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   void _playgroundListener() {
     final value = _playgroundController.value;
-    final isPlaygroundActive = value.hasFocus || value.isEditing || value.hasStickers;
+    final isPlaygroundActive =
+        value.hasFocus || value.isEditing || value.hasStickers;
     _camController.update(isPlaygroundActive: isPlaygroundActive);
   }
 
@@ -148,12 +158,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver, Ti
 
   ///
   void _hideSB() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
   ///
   void _showSB() {
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
   }
 
   Future<bool> _onWillPop() async {
