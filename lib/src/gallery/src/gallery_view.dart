@@ -181,7 +181,7 @@ class _GalleryViewState extends State<GalleryView>
   late final PanelController _panelController;
 
   late final AnimationController _animationController;
-  late final Animation<double> _animation;
+  late final Animation<int> _animation;
 
   double albumHeight = 0;
 
@@ -205,7 +205,7 @@ class _GalleryViewState extends State<GalleryView>
         curve: Curves.fastLinearToSlowEaseIn,
         reverseCurve: Curves.easeOut,
       ),
-    ) as Animation<double>;
+    );
   }
 
   void _toogleAlbumList(bool isVisible) {
