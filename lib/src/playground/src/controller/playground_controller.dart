@@ -81,12 +81,9 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
       value = value.copyWith(background: background);
     } else {
       final current = value.background;
-      final index = value.background is GradientBackground
-          ? gradients.indexOf(current as GradientBackground)
-          : 0;
+      final index = value.background is GradientBackground ? gradients.indexOf(current as GradientBackground) : 0;
       final hasMatch = index != -1;
-      final nextIndex =
-          hasMatch && index + 1 < gradients.length ? index + 1 : 0;
+      final nextIndex = hasMatch && index + 1 < gradients.length ? index + 1 : 0;
       final bg = gradients[nextIndex];
       value = value.copyWith(background: bg, textBackground: bg);
     }
@@ -102,8 +99,7 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
       _index = textColors.indexOf(currentColor);
     }
 
-    final sticker =
-        TextSticker(style: TextStyle(color: textColors[_index + 1]));
+    final sticker = TextSticker(style: TextStyle(color: textColors[_index + 1]));
 
     value = value.copyWith(
       textColor: textColors[_index + 1],
@@ -114,13 +110,12 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
   /// Take screen shot of the playground
   Future<LikkEntity?> takeScreenshot() async {
     try {
-      final boundary = _playgroundKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary = _playgroundKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary != null) {
         final image = await boundary.toImage();
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         final data = byteData!.buffer.asUint8List();
-        final entity = await PhotoManager.editor.saveImage(data);
+        final entity = await PhotoManager.editor.saveImage(data, title: "screenshot");
         // await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         return LikkEntity(entity: entity!, bytes: data);
       }

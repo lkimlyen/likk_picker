@@ -2,8 +2,12 @@ include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
   strong-mode:
-      implicit-casts: false
-      implicit-dynamic: false
+    implicit-casts: false
+    implicit-dynamic: false
   errors:
     missing_required_param: error
     missing_return: error
+
+linter:
+  rules:
+    lines_longer_than_80_chars: false

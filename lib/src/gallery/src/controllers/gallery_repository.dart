@@ -57,8 +57,7 @@ class GalleryRepository {
         if (albums[i].name.toLowerCase() == 'hidden') {
           albums.removeAt(i);
         }
-        if (albums[i].name.toLowerCase().contains('recent') ||
-            albums[i].name.toLowerCase().contains('camera roll')) {
+        if (albums[i].name.toLowerCase().contains('recent') || albums[i].name.toLowerCase().contains('camera roll')) {
           final tmp = albums[i];
           albums.removeAt(i);
           // ignore: cascade_invocations
@@ -73,7 +72,7 @@ class GalleryRepository {
       // Update selected album
       albumNotifier.value = BaseState(data: album, hasPermission: true);
 
-      final entities = await album?.assetList ?? <AssetEntity>[];
+      final entities = await album?.getAssetListPaged(page: 0, size: 60) ?? <AssetEntity>[];
       // Update selected album entities list
       entitiesNotifier.value = BaseState(data: entities, hasPermission: true);
     } catch (e) {
@@ -106,10 +105,9 @@ class GalleryRepository {
     final state = await PhotoManager.requestPermissionExtend();
     if (state == PermissionState.authorized) {
       try {
-        final entities = await album.assetList;
+        final entities = await album.getAssetListPaged(page: 0, size: 60);
         entitiesNotifier.value = BaseState(data: entities, hasPermission: true);
-        recentEntitiesNotifier.value =
-            BaseState(data: entities, hasPermission: true);
+        recentEntitiesNotifier.value = BaseState(data: entities, hasPermission: true);
       } catch (e) {
         entitiesNotifier.value = BaseState(
           hasPermission: true,
@@ -169,21 +167,4 @@ class BaseState<T> {
         hasPermission: hasPermission ?? this.hasPermission,
         hasError: hasError ?? this.hasError,
       );
-}
-
-///
-extension RequestTypeExtension on RequestType {
-  ///
-  AssetType get assetType {
-    switch (this) {
-      case RequestType.image:
-        return AssetType.image;
-      case RequestType.video:
-        return AssetType.video;
-      case RequestType.audio:
-        return AssetType.audio;
-      default:
-        return AssetType.other;
-    }
-  }
 }

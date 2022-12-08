@@ -49,8 +49,7 @@ class GalleryGridView extends StatelessWidget {
           child: controller.panelSetting.background,
         ),
         ClipRRect(
-          borderRadius:
-              controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
+          borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
           child: ValueListenableBuilder<EntitiesType>(
             valueListenable: entitiesNotifier,
             builder: (context, state, child) {
@@ -86,9 +85,7 @@ class GalleryGridView extends StatelessWidget {
                 controller: panelController.scrollController,
                 child: GridView.builder(
                   controller: panelController.scrollController,
-                  padding:
-                      (controller.setting.padding ?? const EdgeInsets.all(8))
-                          .add(EdgeInsets.only(
+                  padding: (controller.setting.padding ?? const EdgeInsets.all(8)).add(EdgeInsets.only(
                     bottom: MediaQuery.of(context).padding.bottom,
                   )),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -100,8 +97,7 @@ class GalleryGridView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     if (controller.setting.enableCamera && index == 0) {
                       return ClipRRect(
-                        borderRadius: controller.setting.itemBorderRadius ??
-                            BorderRadius.circular(8),
+                        borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
                         child: GestureDetector(
                           onTap: () => onCameraRequest(context),
                           child: controller.setting.cameraItemWidget ??
@@ -116,14 +112,12 @@ class GalleryGridView extends StatelessWidget {
                       );
                     }
 
-                    final ind =
-                        controller.setting.enableCamera ? index - 1 : index;
+                    final ind = controller.setting.enableCamera ? index - 1 : index;
 
                     final entity = state.isLoading ? null : entities[ind];
 
                     return ClipRRect(
-                      borderRadius: controller.setting.itemBorderRadius ??
-                          BorderRadius.circular(8),
+                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
                       child: _MediaTile(
                         controller: controller,
                         entity: entity,
@@ -169,10 +163,9 @@ class _MediaTile extends StatelessWidget {
     return ColoredBox(
       color: Colors.grey.shade800,
       child: FutureBuilder<Uint8List?>(
-        future: entity?.thumbDataWithSize(400, 400),
+        future: entity?.thumbnailDataWithSize(ThumbnailSize(400, 400)),
         builder: (context, snapshot) {
-          final hasData = snapshot.connectionState == ConnectionState.done &&
-              snapshot.data != null;
+          final hasData = snapshot.connectionState == ConnectionState.done && snapshot.data != null;
 
           if (hasData) {
             final dEntity = LikkEntity(entity: entity!, bytes: snapshot.data!);
@@ -268,30 +261,20 @@ class _SelectionCount extends StatelessWidget {
         // if (!isSelected) return const SizedBox();
         final index = value.selectedEntities.indexOf(entity);
 
-        final crossFadeState =
-            isSelected ? CrossFadeState.showFirst : CrossFadeState.showSecond;
+        final crossFadeState = isSelected ? CrossFadeState.showFirst : CrossFadeState.showSecond;
 
         final Widget secondChild = Align(
           alignment: controller.setting.selectionCountAlignment,
           child: Padding(
-            padding: controller.setting.selectionCountMargin ??
-                const EdgeInsets.all(8),
+            padding: controller.setting.selectionCountMargin ?? const EdgeInsets.all(8),
             child: controller.setting.selectionCountBuilder != null
                 ? controller.setting.selectionCountBuilder!(index)
                 : CircleAvatar(
-                    backgroundColor:
-                        controller.setting.selectionCountRingColor ??
-                            Colors.white,
-                    radius: (controller.setting.selectionCountBackgroundSize ??
-                            12) +
-                        (controller.setting.selectionCountRingSize ?? 1),
+                    backgroundColor: controller.setting.selectionCountRingColor ?? Colors.white,
+                    radius: (controller.setting.selectionCountBackgroundSize ?? 12) + (controller.setting.selectionCountRingSize ?? 1),
                     child: CircleAvatar(
-                        backgroundColor:
-                            controller.setting.selectionCountBackgroundColor ??
-                                Theme.of(context).primaryColor,
-                        radius:
-                            controller.setting.selectionCountBackgroundSize ??
-                                12,
+                        backgroundColor: controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor,
+                        radius: controller.setting.selectionCountBackgroundSize ?? 12,
                         child: Padding(
                           padding: const EdgeInsets.all(1),
                           child: FittedBox(
@@ -302,15 +285,9 @@ class _SelectionCount extends StatelessWidget {
                                   )
                                 : Text(
                                     '${index + 1}',
-                                    style: controller
-                                            .setting.selectionCountTextStyle ??
-                                        Theme.of(context)
-                                            .textTheme
-                                            .button
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
+                                    style: controller.setting.selectionCountTextStyle ??
+                                        Theme.of(context).textTheme.button?.copyWith(
+                                              color: Theme.of(context).colorScheme.onPrimary,
                                             ),
                                   ),
                           ),
@@ -325,20 +302,15 @@ class _SelectionCount extends StatelessWidget {
                 ? DecoratedBox(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color:
-                            controller.setting.selectionCountBackgroundColor ??
-                                Theme.of(context).primaryColor,
+                        color: controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor,
                         width: 4,
                       ),
-                      borderRadius: controller.setting.itemBorderRadius ??
-                          BorderRadius.circular(8),
+                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
                     ),
                     child: secondChild,
                   )
                 : ColoredBox(
-                    color: (controller.setting.selectionCountBackgroundColor ??
-                            Theme.of(context).primaryColor)
-                        .withOpacity(0.2),
+                    color: (controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor).withOpacity(0.2),
                     child: secondChild,
                   );
         return AppAnimatedCrossFade(

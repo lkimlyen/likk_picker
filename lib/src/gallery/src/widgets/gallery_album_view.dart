@@ -80,9 +80,7 @@ class GalleryAlbumView extends StatelessWidget {
             CupertinoScrollbar(
               child: ListView.builder(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).padding.bottom +
-                        MediaQuery.of(context).padding.top +
-                        controller.headerSetting.headerMaxHeight),
+                    bottom: MediaQuery.of(context).padding.bottom + MediaQuery.of(context).padding.top + controller.headerSetting.headerMaxHeight),
                 itemCount: state.data!.length,
                 itemBuilder: (context, index) {
                   final entity = state.data![index];
@@ -134,24 +132,19 @@ class _Album extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius:
-                  setting.albumBorderRadius ?? BorderRadius.circular(8),
+              borderRadius: setting.albumBorderRadius ?? BorderRadius.circular(8),
               child: Container(
                 height: imageSize.toDouble(),
                 width: imageSize.toDouble(),
                 color: Colors.grey,
                 child: FutureBuilder<List<AssetEntity>>(
-                  future: entity.getAssetListPaged(0, 1),
+                  future: entity.getAssetListPaged(page: 0, size: 1),
                   builder: (context, listSnapshot) {
-                    if (listSnapshot.connectionState == ConnectionState.done &&
-                        (listSnapshot.data?.isNotEmpty ?? false)) {
+                    if (listSnapshot.connectionState == ConnectionState.done && (listSnapshot.data?.isNotEmpty ?? false)) {
                       return FutureBuilder<Uint8List?>(
-                        future: listSnapshot.data!.first.thumbDataWithSize(
-                            imageSize.toInt() * 5, imageSize.toInt() * 5),
+                        future: listSnapshot.data!.first.thumbnailDataWithSize(ThumbnailSize(imageSize.toInt() * 5, imageSize.toInt() * 5)),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.data != null) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
                             return Image.memory(
                               snapshot.data!,
                               fit: BoxFit.cover,
