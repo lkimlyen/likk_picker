@@ -101,11 +101,17 @@ class GalleryRepository {
 
   /// Get assets for specific [album]
   void fetchAssetsFor(AssetPathEntity album) async {
+    print("aaa 123 vo day album 1234 :${album.name}");
+
     albumNotifier.value = albumNotifier.value.copyWith(data: album);
     final state = await PhotoManager.requestPermissionExtend();
     if (state == PermissionState.authorized) {
       try {
+        print("aaa 123 vo day album 12345 :${album.name}");
+
         final entities = await album.getAssetListPaged(page: 0, size: 60);
+        print("aaa 123 vo day album 123456 :${album.name}");
+
         entitiesNotifier.value = BaseState(data: entities, hasPermission: true);
         recentEntitiesNotifier.value = BaseState(data: entities, hasPermission: true);
       } catch (e) {

@@ -307,7 +307,10 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
   // }
 
   void _onALbumChange(AssetPathEntity album) {
+    print("aaa 123 vo day album :${album.name}");
     if (_animationController.isAnimating) return;
+    print("aaa 123 vo day album 123 :${album.name}");
+
     _controller._repository.fetchAssetsFor(album);
     _toogleAlbumList(true);
   }

@@ -84,7 +84,7 @@ class GalleryAlbumView extends StatelessWidget {
                 itemCount: state.data!.length,
                 itemBuilder: (context, index) {
                   final entity = state.data![index];
-                  return _Album(
+                  return Album(
                     panelSetting: controller.panelSetting,
                     setting: controller.setting,
                     entity: entity,
@@ -101,8 +101,13 @@ class GalleryAlbumView extends StatelessWidget {
   }
 }
 
-class _Album extends StatelessWidget {
-  const _Album({
+class Album extends StatefulWidget {
+  final AssetPathEntity entity;
+  final PanelSetting panelSetting;
+  final GallerySetting setting;
+  final Color color;
+  final Function(AssetPathEntity album)? onPressed;
+  const Album({
     Key? key,
     required this.entity,
     required this.panelSetting,
@@ -111,34 +116,48 @@ class _Album extends StatelessWidget {
     this.color = Colors.grey,
   }) : super(key: key);
 
-  final AssetPathEntity entity;
-  final PanelSetting panelSetting;
-  final GallerySetting setting;
-  final Color color;
-  final Function(AssetPathEntity album)? onPressed;
+  @override
+  State<Album> createState() => _AlbumState();
+}
+
+class _AlbumState extends State<Album> {
+  int _count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getAssetCount();
+  }
+
+  void getAssetCount() async {
+    var count = await widget.entity.assetCountAsync;
+    setState(() {
+      _count = count;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    final int imageSize = setting.albumImageSize ?? 48;
+    final int imageSize = widget.setting.albumImageSize ?? 48;
     return ColoredBox(
-      color: color,
+      color: widget.color,
       child: CupertinoButton(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         onPressed: () {
-          onPressed?.call(entity);
+          widget.onPressed?.call(widget.entity);
         },
         child: Row(
           children: [
             // Image
             ClipRRect(
-              borderRadius: setting.albumBorderRadius ?? BorderRadius.circular(8),
+              borderRadius: widget.setting.albumBorderRadius ?? BorderRadius.circular(8),
               child: Container(
                 height: imageSize.toDouble(),
                 width: imageSize.toDouble(),
                 color: Colors.grey,
                 child: FutureBuilder<List<AssetEntity>>(
-                  future: entity.getAssetListPaged(page: 0, size: 1),
+                  future: widget.entity.getAssetListPaged(page: 0, size: 1),
                   builder: (context, listSnapshot) {
                     if (listSnapshot.connectionState == ConnectionState.done && (listSnapshot.data?.isNotEmpty ?? false)) {
                       return FutureBuilder<Uint8List?>(
@@ -170,20 +189,20 @@ class _Album extends StatelessWidget {
                 children: [
                   // Album name
                   Text(
-                    entity.name,
+                    widget.entity.name,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
-                    ).merge(setting.albumTitleStyle),
+                    ).merge(widget.setting.albumTitleStyle),
                   ),
                   const SizedBox(height: 4.0),
                   // Total photos
                   Text(
-                    entity.assetCount.toString(),
+                    _count.toString(),
                     style: TextStyle(
                       color: Colors.grey.shade500,
                       fontSize: 13.0,
-                    ).merge(setting.albumSubTitleStyle),
+                    ).merge(widget.setting.albumSubTitleStyle),
                   ),
                 ],
               ),
