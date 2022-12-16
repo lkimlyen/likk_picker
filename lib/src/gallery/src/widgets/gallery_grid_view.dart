@@ -163,10 +163,12 @@ class _MediaTile extends StatelessWidget {
     return ColoredBox(
       color: Colors.grey.shade800,
       child: FutureBuilder<Uint8List?>(
-        future: entity?.thumbnailDataWithSize(ThumbnailSize(400, 400)),
+        future: Future<Uint8List?>.delayed(
+          const Duration(milliseconds: 500),
+          () => entity?.thumbnailDataWithSize(ThumbnailSize(400, 400)),
+        ),
         builder: (context, snapshot) {
           final hasData = snapshot.connectionState == ConnectionState.done && snapshot.data != null;
-
           if (hasData) {
             final dEntity = LikkEntity(entity: entity!, bytes: snapshot.data!);
             return GestureDetector(

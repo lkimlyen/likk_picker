@@ -306,12 +306,10 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
   //   Navigator.of(context).pop();
   // }
 
-  void _onALbumChange(AssetPathEntity album) {
-    print("aaa 123 vo day album :${album.name}");
+  void _onALbumChange(AssetPathEntity album) async {
     if (_animationController.isAnimating) return;
-    print("aaa 123 vo day album 123 :${album.name}");
+    await _controller._repository.fetchAssetsFor(album);
 
-    _controller._repository.fetchAssetsFor(album);
     _toogleAlbumList(true);
   }
 

@@ -18,8 +18,7 @@ class RawCameraView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final size = constraints.biggest;
-      final scale =
-          1 / (action.controller.value.aspectRatio * size.aspectRatio);
+      final scale = 1 / (action.controller.value.aspectRatio * size.aspectRatio);
 
       return ClipRect(
         clipper: _Clipper(size),
@@ -37,8 +36,7 @@ class RawCameraView extends StatelessWidget {
                   behavior: HitTestBehavior.opaque,
                   onScaleStart: action.zoom.initZoom,
                   onScaleUpdate: action.zoom.startZooming,
-                  onTapDown: (details) =>
-                      action.exposure.setExposureAndFocus(details, constraints),
+                  onTapDown: (details) => action.exposure.setExposureAndFocus(details, constraints),
                 ),
               ),
             ),

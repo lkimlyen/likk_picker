@@ -11,8 +11,8 @@ dependencies:
 
   path: ^1.8.0
   uuid: ^3.0.4
-  camera: ^0.9.1
-  photo_manager: ^2.5.1+1
+  camera: any
+  photo_manager: 2.3.0
   image_cropper: 1.5.0
   permission_handler: ^10.0.1
 
