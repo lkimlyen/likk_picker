@@ -85,7 +85,7 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
       child: GalleryControllerProvider(
         controller: _controller,
         child: Stack(
-          fit: StackFit.expand,
+          // fit: StackFit.expand,
           children: [
             // Parent view
             Column(
