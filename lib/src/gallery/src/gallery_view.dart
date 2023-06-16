@@ -85,7 +85,7 @@ class _GalleryViewWrapperState extends State<GalleryViewWrapper> {
       child: GalleryControllerProvider(
         controller: _controller,
         child: Stack(
-          // fit: StackFit.expand,
+          fit: StackFit.expand,
           children: [
             // Parent view
             Column(
@@ -177,7 +177,7 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
   late final PanelController _panelController;
 
   late final AnimationController _animationController;
-  late final Animation<int> _animation;
+  late final Animation<num> _animation;
 
   double albumHeight = 0;
 
