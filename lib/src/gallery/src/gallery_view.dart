@@ -177,7 +177,7 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
   late final PanelController _panelController;
 
   late final AnimationController _animationController;
-  late final Animation<int> _animation;
+  late final Animation<num> _animation;
 
   double albumHeight = 0;
 
@@ -195,7 +195,7 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
       value: 0,
     );
 
-    _animation = Tween(begin: 0, end: 1).animate(
+    _animation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.fastLinearToSlowEaseIn,
