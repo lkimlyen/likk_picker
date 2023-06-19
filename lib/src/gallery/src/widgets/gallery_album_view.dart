@@ -159,7 +159,8 @@ class _AlbumState extends State<Album> {
                 child: FutureBuilder<List<AssetEntity>>(
                   future: widget.entity.getAssetListPaged(page: 0, size: 1),
                   builder: (context, listSnapshot) {
-                    if (listSnapshot.connectionState == ConnectionState.done && (listSnapshot.data?.isNotEmpty ?? false)) {
+                    if (listSnapshot.connectionState == ConnectionState.done && (listSnapshot.data?.isNotEmpty ?? false) && (listSnapshot.data!.first.type == AssetType.image
+                    || listSnapshot.data!.first.type == AssetType.video)) {
                       return FutureBuilder<Uint8List?>(
                         future: listSnapshot.data!.first.thumbnailDataWithSize(ThumbnailSize(imageSize.toInt() * 5, imageSize.toInt() * 5)),
                         builder: (context, snapshot) {
