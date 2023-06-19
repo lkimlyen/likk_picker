@@ -101,7 +101,7 @@ class _ShutterButtonState extends State<_ShutterButton>
         }
       });
 
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
 
   void _startRecording() {
@@ -317,7 +317,7 @@ class _PulseState extends State<_Pulse> {
   @override
   void initState() {
     super.initState();
-    _animation = Tween(begin: 0.0, end: 1.0).animate(
+    _animation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: widget.controller, curve: Curves.easeIn),
     );
   }
