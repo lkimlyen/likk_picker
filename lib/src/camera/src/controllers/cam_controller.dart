@@ -193,7 +193,9 @@ class CamController extends ValueNotifier<ActionValue> {
 
       if (entity != null) {
         final likkEntity = LikkEntity(entity: entity, bytes: data);
-        await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+          SystemUiOverlay.top
+        ]);
         _uiHandler.pop<LikkEntity>(likkEntity);
         return likkEntity;
       } else {
@@ -296,7 +298,9 @@ class CamController extends ValueNotifier<ActionValue> {
         if (entity != null) {
           final d = await entity.thumbnailData;
           final likkEntity = LikkEntity(entity: entity, bytes: d!);
-          await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+            SystemUiOverlay.top
+          ]);
           _uiHandler.pop<LikkEntity>(likkEntity);
           return;
         } else {

@@ -150,7 +150,7 @@ class ScrollListenerState extends State<ScrollListener> {
   bool _handleGlowNotification(OverscrollIndicatorNotification notification) {
     if (notification.depth != 0) return false;
     if (_disableGlow) {
-      notification.disallowGlow();
+      notification.disallowIndicator();
       return true;
     }
     return false;
