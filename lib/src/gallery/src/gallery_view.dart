@@ -902,14 +902,6 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: file.path,
-      androidUiSettings: const AndroidUiSettings(
-        toolbarTitle: 'Cropper',
-        toolbarColor: Color(0xFFF54B64),
-        toolbarWidgetColor: Colors.white,
-        initAspectRatio: CropAspectRatioPreset.original,
-        lockAspectRatio: false,
-      ),
-      iosUiSettings: const IOSUiSettings(),
     );
     final data = await croppedFile?.readAsBytes();
 
