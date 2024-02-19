@@ -31,7 +31,7 @@ class CamController extends ValueNotifier<ActionValue> {
         requestType = request,
         super(ActionValue(
           resolutionPreset: resolutionPreset ?? ResolutionPreset.medium,
-          imageFormatGroup: imageFormatGroup ?? ImageFormatGroup.jpeg,
+          imageFormatGroup: imageFormatGroup ?? (Platform.isIOS ? ImageFormatGroup.yuv420: ImageFormatGroup.jpeg),
         ));
 
   ///
