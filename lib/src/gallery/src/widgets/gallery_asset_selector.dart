@@ -253,7 +253,8 @@ class _TextButton extends StatelessWidget {
       ),
       child: Text(
         label ?? '',
-        style: Theme.of(context).textTheme.button!.copyWith(
+        style:
+        Theme.of(context).textTheme.labelMedium?.copyWith(
               color: labelColor ?? Theme.of(context).colorScheme.onPrimary,
             ),
         maxLines: 1,

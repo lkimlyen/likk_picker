@@ -145,7 +145,7 @@ class _AnimatedDropdown extends StatelessWidget {
               children: [
                 Text(
                   album.data?.name ?? 'Unknown',
-                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),

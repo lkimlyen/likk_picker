@@ -288,7 +288,7 @@ class _SelectionCount extends StatelessWidget {
                                 : Text(
                                     '${index + 1}',
                                     style: controller.setting.selectionCountTextStyle ??
-                                        Theme.of(context).textTheme.button?.copyWith(
+                                        Theme.of(context).textTheme.labelMedium?.copyWith(
                                               color: Theme.of(context).colorScheme.onPrimary,
                                             ),
                                   ),
