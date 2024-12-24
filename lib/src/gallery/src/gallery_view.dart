@@ -989,7 +989,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   }) async {
     // If dont have permission dont do anything
     final permission = await PhotoManager.requestPermissionExtend();
-    if (permission != PermissionState.authorized && permission != PermissionState.limited) {
+    if (permission != PermissionState.authorized) {
       PhotoManager.openSetting();
       return [];
     }
