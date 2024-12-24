@@ -219,7 +219,7 @@ class _IconButton extends StatelessWidget {
       final _icon = icon as IconData;
       iconWidget = Icon(
         _icon,
-        color: Colors.lightBlue.shade300,
+        color: const Color(0xFF14161E),
         size: size ?? 26.0,
       );
     }
