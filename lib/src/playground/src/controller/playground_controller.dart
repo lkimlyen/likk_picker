@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 import '../entities/playground_background.dart';
 import '../entities/playground_value.dart';
@@ -115,7 +117,7 @@ class PlaygroundController extends ValueNotifier<PlaygroundValue> {
         final image = await boundary.toImage();
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         final data = byteData!.buffer.asUint8List();
-        final entity = await PhotoManager.editor.saveImage(data, title: "screenshot");
+        final entity = await PhotoManager.editor.saveImage(data, title: "screenshot", filename: Uuid().v4());
         // await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         return LikkEntity(entity: entity!, bytes: data);
       }

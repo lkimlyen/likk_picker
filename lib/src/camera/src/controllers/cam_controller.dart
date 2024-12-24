@@ -5,6 +5,7 @@ import 'package:likk_picker/likk_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
+
 // import 'package:pedantic/pedantic.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -31,7 +32,10 @@ class CamController extends ValueNotifier<ActionValue> {
         requestType = request,
         super(ActionValue(
           resolutionPreset: resolutionPreset ?? ResolutionPreset.medium,
-          imageFormatGroup: imageFormatGroup ?? (Platform.isIOS ? ImageFormatGroup.yuv420: ImageFormatGroup.jpeg),
+          imageFormatGroup: imageFormatGroup ??
+              (Platform.isIOS
+                  ? ImageFormatGroup.yuv420
+                  : ImageFormatGroup.jpeg),
         ));
 
   ///
@@ -71,7 +75,8 @@ class CamController extends ValueNotifier<ActionValue> {
 
   ///
   void changeCameraType(CameraType type) {
-    final canSwitch = type == CameraType.selfi && value.lensDirection != CameraLensDirection.front;
+    final canSwitch = type == CameraType.selfi &&
+        value.lensDirection != CameraLensDirection.front;
     if (canSwitch) {
       switchCameraDirection(CameraLensDirection.front);
     }
@@ -116,7 +121,8 @@ class CamController extends ValueNotifier<ActionValue> {
       if (controller.value.hasError) {
         final error = 'Camera error ${controller.value.errorDescription}';
         _uiHandler.showSnackBar(error);
-        _controllerNotifier.value = _controllerNotifier.value.copyWith(error: error);
+        _controllerNotifier.value =
+            _controllerNotifier.value.copyWith(error: error);
       }
     });
 
@@ -173,10 +179,9 @@ class CamController extends ValueNotifier<ActionValue> {
       final file = File(xFile.path);
       final data = await file.readAsBytes();
       final entity = saveImage
-          ? await PhotoManager.editor.saveImage(
-              data,
+          ? await PhotoManager.editor.saveImage(data,
               title: path.basename(file.path),
-            )
+              filename: file.path.substring(file.path.lastIndexOf("/") + 1))
           : AssetEntity(
               id: path.basename(file.path),
               typeInt: 1,
@@ -193,9 +198,8 @@ class CamController extends ValueNotifier<ActionValue> {
 
       if (entity != null) {
         final likkEntity = LikkEntity(entity: entity, bytes: data);
-        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-          SystemUiOverlay.top
-        ]);
+        await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+            overlays: [SystemUiOverlay.top]);
         _uiHandler.pop<LikkEntity>(likkEntity);
         return likkEntity;
       } else {
@@ -233,7 +237,9 @@ class CamController extends ValueNotifier<ActionValue> {
     }
 
     try {
-      final mode = controller.value.flashMode == FlashMode.off ? FlashMode.always : FlashMode.off;
+      final mode = controller.value.flashMode == FlashMode.off
+          ? FlashMode.always
+          : FlashMode.off;
       value = value.copyWith(flashMode: mode);
       await controller.setFlashMode(mode);
     } on CameraException catch (e) {
@@ -298,9 +304,8 @@ class CamController extends ValueNotifier<ActionValue> {
         if (entity != null) {
           final d = await entity.thumbnailData;
           final likkEntity = LikkEntity(entity: entity, bytes: d!);
-          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-            SystemUiOverlay.top
-          ]);
+          await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+              overlays: [SystemUiOverlay.top]);
           _uiHandler.pop<LikkEntity>(likkEntity);
           return;
         } else {
@@ -382,7 +387,7 @@ class CamController extends ValueNotifier<ActionValue> {
     }
   }
 
-  //
+//
 }
 
 ///
@@ -467,12 +472,16 @@ class ActionValue {
   ///
   /// Current lense direction
   ///
-  CameraLensDirection get lensDirection => cameraDescription?.lensDirection ?? CameraLensDirection.back;
+  CameraLensDirection get lensDirection =>
+      cameraDescription?.lensDirection ?? CameraLensDirection.back;
 
   ///
   /// Opposite lense direction of current [lensDirection]
   ///
-  CameraLensDirection get oppositeLensDirection => lensDirection == CameraLensDirection.back ? CameraLensDirection.front : CameraLensDirection.back;
+  CameraLensDirection get oppositeLensDirection =>
+      lensDirection == CameraLensDirection.back
+          ? CameraLensDirection.front
+          : CameraLensDirection.back;
 
   ///
   /// Hide camera close button if :-
@@ -480,7 +489,8 @@ class ActionValue {
   /// 1. Camera type is [CameraType.text]
   /// 2. Video recoring is active [isRecordingVideo]
   ///
-  bool get hideCameraCloseButton => cameraType == CameraType.text || isRecordingVideo;
+  bool get hideCameraCloseButton =>
+      cameraType == CameraType.text || isRecordingVideo;
 
   ///
   /// Hide camera flash button if :-
@@ -489,7 +499,10 @@ class ActionValue {
   /// 2. Camera lense direction is front
   /// 3. Video recoring is active [isRecordingVideo]
   ///
-  bool get hideCameraFlashButton => cameraType == CameraType.text || lensDirection == CameraLensDirection.front || isRecordingVideo;
+  bool get hideCameraFlashButton =>
+      cameraType == CameraType.text ||
+      lensDirection == CameraLensDirection.front ||
+      isRecordingVideo;
 
   ///
   /// Hide camera shutter button if :-
@@ -512,7 +525,8 @@ class ActionValue {
   /// 1. Camera type is [CameraType.text]
   /// 2. Video recoring is active [isRecordingVideo]
   ///
-  bool get hideCameraGalleryButton => cameraType == CameraType.text || isRecordingVideo;
+  bool get hideCameraGalleryButton =>
+      cameraType == CameraType.text || isRecordingVideo;
 
   ///
   /// Hide camera rotation button if :-
@@ -520,5 +534,6 @@ class ActionValue {
   /// 1. Camera type is [CameraType.text]
   /// 2. Video recoring is active [isRecordingVideo]
   ///
-  bool get hideCameraRotationButton => cameraType == CameraType.text || isRecordingVideo;
+  bool get hideCameraRotationButton =>
+      cameraType == CameraType.text || isRecordingVideo;
 }

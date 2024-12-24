@@ -7,10 +7,12 @@ import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
 import 'package:likk_picker/src/slidable_panel/slidable_panel.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:uuid/uuid.dart';
 
 // ignore: always_use_package_imports
 // ignore: always_use_package_imports
 import 'controllers/gallery_repository.dart';
+import 'controllers/gallery_repository.dart' as gr;
 // ignore: always_use_package_imports
 // ignore: always_use_package_imports
 import 'entities/gallery_value.dart';
@@ -622,7 +624,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
   final ValueNotifier<AlbumsType> _albumsNotifier;
 
   /// Current album notifier
-  final ValueNotifier<AlbumType> _albumNotifier;
+  final ValueNotifier<gr.AlbumType> _albumNotifier;
 
   /// Current album entities notifier
   final ValueNotifier<EntitiesType> _entitiesNotifier;
@@ -911,7 +913,7 @@ class GalleryController extends ValueNotifier<GalleryValue> {
 
     AssetEntity? assetEntity;
     if (setting.saveCropper) {
-      assetEntity = await PhotoManager.editor.saveImage(data, title: "aaa");
+      assetEntity = await PhotoManager.editor.saveImage(data, title: "aaa", filename: Uuid().v4());
     } else {
       assetEntity = AssetEntity(
         id: 'temporary',
