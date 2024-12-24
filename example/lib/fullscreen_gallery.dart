@@ -58,7 +58,7 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
         headerBackground: Image.asset('../assets/bg.jpeg', fit: BoxFit.cover),
         albumBuilder: (context, album, child) => Text(
           album.data?.name ?? 'Unknown',
-          style: Theme.of(context).textTheme.subtitle2!.copyWith(
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
@@ -119,8 +119,7 @@ class _FullscreenGalleryState extends State<FullscreenGallery> {
               notifier.value = entities;
             },
             style: TextButton.styleFrom(
-              primary: Colors.white,
-              backgroundColor: Colors.green,
+              foregroundColor: Colors.white, backgroundColor: Colors.green,
             ),
             child: const Text('Use Controller'),
           ),

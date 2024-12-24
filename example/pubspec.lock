@@ -21,42 +21,42 @@ packages:
     dependency: transitive
     description:
       name: camera
-      sha256: "12c497020e3778f83191ccfad126dfa31106de91accba6c89cc68a0d30b41f0e"
+      sha256: dfa8fc5a1adaeb95e7a54d86a5bd56f4bb0e035515354c8ac6d262e35cec2ec8
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.0+3"
+    version: "0.10.6"
   camera_android:
     dependency: transitive
     description:
       name: camera_android
-      sha256: b2d05680a5e4a57c4841f3ca31a586e0598584cc0ea19d1ce3ca3844de9cb0a2
+      sha256: "19b7226387218864cb2388e1ad5db7db50d065222f5511254b03fc397dd21a5e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.1"
+    version: "0.10.9+17"
   camera_avfoundation:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: bca81d7446f5aded0674f1d11bf0e5f60d54d66decd7bc1564729f8880d29d6b
+      sha256: "2e4c568f70e406ccb87376bc06b53d2f5bebaab71e2fbcc1a950e31449381bcf"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.9"
+    version: "0.9.17+5"
   camera_platform_interface:
     dependency: transitive
     description:
       name: camera_platform_interface
-      sha256: b13c4c7a1462f6b3453ac5df900fd42a8ab66477c2004bc16f8a7fdcf3e5fcd9
+      sha256: fdb8b7a40c3564ce2967273445707d58cbff91bc2fa129e8de80af8cc501e793
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.7.1"
   camera_web:
     dependency: transitive
     description:
       name: camera_web
-      sha256: "6db5052de8c5074edc8cf75bc9a63a56dd0ae18646152b9d2273a9a4f6301b17"
+      sha256: "595f28c89d1fb62d77c73c633193755b781c6d2e0ebcd8dc25b763b514e6ba8f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1"
+    version: "0.3.5"
   characters:
     dependency: transitive
     description:
@@ -319,14 +319,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: "93982981971e812c94d4a6fa3a57b89f9ec12b38b6380cd3c1370c3b01e4580e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -445,5 +437,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  dart: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"

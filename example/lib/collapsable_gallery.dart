@@ -80,8 +80,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
                         playgroundController?.updateValue(hasFocus: true);
                       },
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white, backgroundColor: Colors.green,
                       ),
                       child: const Text('Add Text'),
                     ),
@@ -95,8 +94,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
                         notifier.value = entities;
                       },
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white, backgroundColor: Colors.green,
                       ),
                       child: const Text('Use Controller'),
                     ),
@@ -106,8 +104,7 @@ class _CollapsableGalleryState extends State<CollapsableGallery> {
                         playgroundController?.takeScreenshot();
                       },
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white, backgroundColor: Colors.green,
                       ),
                       child: const Text('Capture'),
                     ),
