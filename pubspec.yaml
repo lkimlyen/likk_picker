@@ -4,22 +4,22 @@ version: 1.1.5+1
 homepage: https://github.com/tranhuongk/likk_picker
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: ^3.8.1
 dependencies:
   flutter:
     sdk: flutter
 
   path: ^1.8.0
-  uuid: ^4.3.3
+  uuid: ^4.5.2
   camera: ^0.10.6
-  photo_manager: ^3.6.3
-  image_cropper: ^5.0.1
+  photo_manager: ^3.7.1
+  image_cropper: ^11.0.0  
   permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^2.1.2
+  very_good_analysis: ^9.0.0
 
 flutter:
   uses-material-design: true
