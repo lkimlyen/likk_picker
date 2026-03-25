@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:likk_picker/likk_picker.dart';
 import 'package:likk_picker/src/animations/animations.dart';
@@ -424,14 +424,21 @@ class _GalleryViewState extends State<GalleryView> with SingleTickerProviderStat
         //
       ],
     );
-    return WillPopScope(
-      onWillPop: _onClosePressed,
-      child: _controller.fullScreenMode
-          ? Scaffold(
-              backgroundColor: Colors.transparent,
-              body: body,
-            )
-          : body,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.black,
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: WillPopScope(
+        onWillPop: _onClosePressed,
+        child: _controller.fullScreenMode
+            ? Scaffold(
+                backgroundColor: Colors.transparent,
+                body: body,
+              )
+            : body,
+      ),
     );
   }
 }

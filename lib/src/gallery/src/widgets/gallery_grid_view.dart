@@ -211,8 +211,9 @@ class _MediaTile extends StatelessWidget {
                     ),
 
                   // Image selection overlay
-                  // if (!controller.singleSelection)
-                  _SelectionCount(controller: controller, entity: dEntity),
+                  Positioned.fill(
+                    child: _SelectionCount(controller: controller, entity: dEntity),
+                  ),
 
                   //
                 ],
@@ -282,35 +283,42 @@ class _SelectionCount extends StatelessWidget {
 
         final crossFadeState = isSelected ? CrossFadeState.showFirst : CrossFadeState.showSecond;
 
-        final Widget secondChild = Align(
+        final selectionColor = controller.setting.selectionCountBackgroundColor ?? const Color(0xFF0079EE);
+        final circleSize = (controller.setting.selectionCountBackgroundSize ?? 10) * 2;
+        final margin = controller.setting.selectionCountMargin ?? const EdgeInsets.all(10);
+
+        final Widget countBadge = Align(
           alignment: controller.setting.selectionCountAlignment,
           child: Padding(
-            padding: controller.setting.selectionCountMargin ?? const EdgeInsets.all(8),
+            padding: margin,
             child: controller.setting.selectionCountBuilder != null
                 ? controller.setting.selectionCountBuilder!(index)
-                : CircleAvatar(
-                    backgroundColor: controller.setting.selectionCountRingColor ?? Colors.white,
-                    radius: (controller.setting.selectionCountBackgroundSize ?? 12) + (controller.setting.selectionCountRingSize ?? 1),
-                    child: CircleAvatar(
-                        backgroundColor: controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor,
-                        radius: controller.setting.selectionCountBackgroundSize ?? 12,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1),
-                          child: FittedBox(
-                            child: controller.setting.maximum == 1
-                                ? const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                  )
-                                : Text(
-                                    '${index + 1}',
-                                    style: controller.setting.selectionCountTextStyle ??
-                                        Theme.of(context).textTheme.labelMedium?.copyWith(
-                                              color: Theme.of(context).colorScheme.onPrimary,
-                                            ),
-                                  ),
+                : Container(
+                    width: circleSize,
+                    height: circleSize,
+                    decoration: ShapeDecoration(
+                      color: selectionColor,
+                      shape: const OvalBorder(),
+                    ),
+                    alignment: Alignment.center,
+                    child: controller.setting.maximum == 1
+                        ? const Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 14,
+                          )
+                        : Text(
+                            '${index + 1}',
+                            textAlign: TextAlign.center,
+                            style: controller.setting.selectionCountTextStyle ??
+                                const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.4,
+                                  letterSpacing: -0.24,
+                                ),
                           ),
-                        )),
                   ),
           ),
         );
@@ -321,24 +329,25 @@ class _SelectionCount extends StatelessWidget {
                 ? DecoratedBox(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor,
-                        width: 4,
+                        color: selectionColor,
+                        width: 2,
                       ),
                       borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
                     ),
-                    child: secondChild,
+                    child: countBadge,
                   )
                 : ColoredBox(
-                    color: (controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor).withOpacity(0.2),
-                    child: secondChild,
+                    color: selectionColor.withOpacity(0.2),
+                    child: countBadge,
                   );
+
         final unselectedChild = Align(
           alignment: controller.setting.selectionCountAlignment,
           child: Padding(
-            padding: controller.setting.selectionCountMargin ?? const EdgeInsets.all(8),
+            padding: margin,
             child: Container(
-              width: (controller.setting.selectionCountBackgroundSize ?? 12) * 2,
-              height: (controller.setting.selectionCountBackgroundSize ?? 12) * 2,
+              width: circleSize,
+              height: circleSize,
               decoration: const ShapeDecoration(
                 shape: OvalBorder(
                   side: BorderSide(width: 2, color: Colors.white),

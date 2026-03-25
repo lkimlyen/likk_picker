@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../controllers/gallery_repository.dart';
 import '../controllers/gallery_repository.dart' as gr;
 // ignore: always_use_package_imports
+import '../entities/gallery_value.dart';
 import '../gallery_view.dart';
 // ignore: always_use_package_imports
 import 'gallery_builder.dart';
@@ -62,7 +63,8 @@ class _GalleryHeaderState extends State<GalleryHeader> {
       child: Container(
         constraints: BoxConstraints(
           minHeight: headerSetting.headerMinHeight,
-          maxHeight: headerSetting.headerMaxHeight +
+          maxHeight:
+              headerSetting.headerMaxHeight +
               (_controller.fullScreenMode
                   ? MediaQuery.of(context).padding.top
                   : 0),
@@ -98,6 +100,24 @@ class _GalleryHeaderState extends State<GalleryHeader> {
                           albumNotifier: widget.albumNotifier,
                           builder: _controller.headerSetting.albumBuilder,
                         ),
+                      ),
+                      ValueListenableBuilder<GalleryValue>(
+                        valueListenable: _controller,
+                        builder: (context, value, child) {
+                          final count = value.selectedEntities.length;
+                          if (count == 0) return const SizedBox.shrink();
+                          return Text(
+                            '$count',
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Color(0xFF0079EE),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              height: 1.4,
+                              letterSpacing: -0.14,
+                            ),
+                          );
+                        },
                       ),
                       _controller.headerSetting.headerRightWidget,
                     ],
@@ -135,21 +155,22 @@ class _AnimatedDropdown extends StatelessWidget {
 
   ///
   final Widget Function(BuildContext, BaseState<AssetPathEntity>, Widget?)?
-      builder;
+  builder;
 
   Widget _child(bool visible) {
     return ValueListenableBuilder<gr.AlbumType>(
       valueListenable: albumNotifier,
-      builder: builder ??
+      builder:
+          builder ??
           (context, album, child) {
             return Row(
               children: [
                 Text(
                   album.data?.name ?? 'Unknown',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 TweenAnimationBuilder<double>(
                   tween: Tween(
@@ -167,7 +188,7 @@ class _AnimatedDropdown extends StatelessWidget {
                     icon: Icons.keyboard_arrow_down,
                     size: 34,
                   ),
-                )
+                ),
               ],
             );
           },
