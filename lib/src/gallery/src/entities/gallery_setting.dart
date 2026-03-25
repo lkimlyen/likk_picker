@@ -18,7 +18,7 @@ class GallerySetting {
     this.backAndUnselect,
     this.onItemClick,
     this.onReachedMaximumLimit,
-    this.selectionCountAlignment = Alignment.center,
+    this.selectionCountAlignment = Alignment.topRight,
     this.actionButton = const SizedBox(),
     this.selectionCountTextStyle,
     this.selectionCountBackgroundColor,

@@ -49,7 +49,7 @@ class GalleryGridView extends StatelessWidget {
           child: controller.panelSetting.background,
         ),
         ClipRRect(
-          borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
+          borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
           child: ValueListenableBuilder<EntitiesType>(
             valueListenable: entitiesNotifier,
             builder: (context, state, child) {
@@ -85,27 +85,44 @@ class GalleryGridView extends StatelessWidget {
                 controller: panelController.scrollController,
                 child: GridView.builder(
                   controller: panelController.scrollController,
-                  padding: (controller.setting.padding ?? const EdgeInsets.all(8)).add(EdgeInsets.only(
+                  padding: (controller.setting.padding ?? EdgeInsets.zero).add(EdgeInsets.only(
                     bottom: MediaQuery.of(context).padding.bottom,
                   )),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: controller.setting.crossAxisCount ?? 3,
-                    crossAxisSpacing: controller.setting.space ?? 1.5,
-                    mainAxisSpacing: controller.setting.space ?? 1.5,
+                    crossAxisSpacing: controller.setting.space ?? 4,
+                    mainAxisSpacing: controller.setting.space ?? 4,
                   ),
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
                     if (controller.setting.enableCamera && index == 0) {
                       return ClipRRect(
-                        borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
+                        borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
                         child: GestureDetector(
                           onTap: () => onCameraRequest(context),
                           child: controller.setting.cameraItemWidget ??
                               const ColoredBox(
-                                color: Colors.black,
-                                child: Icon(
-                                  CupertinoIcons.photo_camera_solid,
-                                  color: Colors.white,
+                                color: Color(0xFF16171B),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.photo_camera_solid,
+                                      color: Color(0xFFAEB6BF),
+                                      size: 36,
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      '카메라',
+                                      style: TextStyle(
+                                        color: Color(0xFFAEB6BF),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.4,
+                                        letterSpacing: -0.14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                         ),
@@ -117,7 +134,7 @@ class GalleryGridView extends StatelessWidget {
                     final entity = state.isLoading ? null : entities[ind];
 
                     return ClipRRect(
-                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
+                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
                       child: _MediaTile(
                         controller: controller,
                         entity: entity,
@@ -307,7 +324,7 @@ class _SelectionCount extends StatelessWidget {
                         color: controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor,
                         width: 4,
                       ),
-                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.circular(8),
+                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
                     ),
                     child: secondChild,
                   )
@@ -315,9 +332,25 @@ class _SelectionCount extends StatelessWidget {
                     color: (controller.setting.selectionCountBackgroundColor ?? Theme.of(context).primaryColor).withOpacity(0.2),
                     child: secondChild,
                   );
+        final unselectedChild = Align(
+          alignment: controller.setting.selectionCountAlignment,
+          child: Padding(
+            padding: controller.setting.selectionCountMargin ?? const EdgeInsets.all(8),
+            child: Container(
+              width: (controller.setting.selectionCountBackgroundSize ?? 12) * 2,
+              height: (controller.setting.selectionCountBackgroundSize ?? 12) * 2,
+              decoration: const ShapeDecoration(
+                shape: OvalBorder(
+                  side: BorderSide(width: 2, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        );
+
         return AppAnimatedCrossFade(
           firstChild: firstChild,
-          secondChild: const SizedBox(),
+          secondChild: unselectedChild,
           crossFadeState: crossFadeState,
           duration: const Duration(milliseconds: 300),
         );
