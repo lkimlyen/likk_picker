@@ -324,33 +324,39 @@ class _SelectionCount extends StatelessWidget {
         );
 
         final firstChild = index == -1
-            ? const SizedBox()
+            ? const SizedBox.expand()
             : controller.setting.selectedStyle == SelectedStyle.border
-                ? DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: selectionColor,
-                        width: 2,
+                ? SizedBox.expand(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: selectionColor,
+                          width: 2,
+                        ),
+                        borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
                       ),
-                      borderRadius: controller.setting.itemBorderRadius ?? BorderRadius.zero,
+                      child: countBadge,
                     ),
-                    child: countBadge,
                   )
-                : ColoredBox(
-                    color: selectionColor.withOpacity(0.2),
-                    child: countBadge,
+                : SizedBox.expand(
+                    child: ColoredBox(
+                      color: selectionColor.withOpacity(0.2),
+                      child: countBadge,
+                    ),
                   );
 
-        final unselectedChild = Align(
-          alignment: controller.setting.selectionCountAlignment,
-          child: Padding(
-            padding: margin,
-            child: Container(
-              width: circleSize,
-              height: circleSize,
-              decoration: const ShapeDecoration(
-                shape: OvalBorder(
-                  side: BorderSide(width: 2, color: Colors.white),
+        final unselectedChild = SizedBox.expand(
+          child: Align(
+            alignment: controller.setting.selectionCountAlignment,
+            child: Padding(
+              padding: margin,
+              child: Container(
+                width: circleSize,
+                height: circleSize,
+                decoration: const ShapeDecoration(
+                  shape: OvalBorder(
+                    side: BorderSide(width: 2, color: Colors.white),
+                  ),
                 ),
               ),
             ),
